@@ -43,6 +43,9 @@ def read_csv(path: str):
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdout, sys.stderr):  # piped output on Windows defaults to cp1252 and can't print ₹
+        if not stream.isatty():
+            stream.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--db", default="stay.db")
